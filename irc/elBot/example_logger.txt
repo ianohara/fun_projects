@@ -1,0 +1,12 @@
+[20:01:56] [connected at Sat Feb 18 20:01:56 2012]
+[20:01:58] [I have joined #Eng_Bestiary]
+[20:02:02] <ianohara> hey elBot
+[20:08:19] <ianohara> elBot
+[20:25:11] <ianohara> howdy
+[20:39:13] <ianohara> elBot: Wassup?
+[20:39:13] <elBot> ianohara: I am a log bot
+[20:39:19] <ianohara> ianohara
+[20:46:19] [disconnected at Sat Feb 18 20:46:19 2012]
+[20:47:21] [connected at Sat Feb 18 20:47:21 2012]
+[20:47:21] [I have joined #Eng_Bestiary]
+[21:11:07] [disconnected at Sat Feb 18 21:11:07 2012]
