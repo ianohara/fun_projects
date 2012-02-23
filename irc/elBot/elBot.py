@@ -13,6 +13,8 @@ from twisted.python import log
 # system imports
 import time, sys
 
+# imports for the fun stuff
+import datastructures.trie as trie
 
 class MessageLogger:
     def __init__(self, file):
@@ -81,9 +83,10 @@ class ElBot(irc.IRCClient):
 
 class ElBotFactory(protocol.ClientFactory):
 
-    def __init__(self, channel, filename):
+    def __init__(self, channel=None, filename=None, settings=None):
         self.channel = channel
         self.filename = filename
+        self.settings = settings
 
     def buildProtocol(self, addr):
         p = ElBot()
@@ -104,10 +107,10 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
     
     # create factory protocol and application
-    f = ElBotFactory('#Eng_Bestiary', 'example_logger.txt')
+    botFactory = ElBotFactory('#Eng_Bestiary', 'example_logger.txt')
 
     # connect factory to this host and port
-    reactor.connectTCP("ec2-107-20-56-124.compute-1.amazonaws.com", 6667, f)
+    reactor.connectTCP("ec2-107-20-56-124.compute-1.amazonaws.com", 6667, botFactory)
 
     # run bot
     reactor.run()
