@@ -1,7 +1,6 @@
 """
 A trie implementation (originally for elBot)
 by: Ian O'Hara, 2012
-
 """
 import logging as log
 
@@ -51,3 +50,5 @@ class Trie():
             self._add_safe_word(node.children[word[0]], word[1:])
         else:
             raise RuntimeWarning # We shouldn't ever reach this...
+
+
