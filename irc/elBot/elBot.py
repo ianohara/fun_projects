@@ -14,7 +14,7 @@ from twisted.python import log
 import time, sys
 
 # imports for the fun stuff
-import datastructures.trie as trie
+from ElBotTrie import ElBotTrie
 
 class MessageLogger:
     def __init__(self, file):
@@ -28,21 +28,61 @@ class MessageLogger:
     def close(self):
         self.file.close()
 
+class WordCounter():
+    def __init__(self, user_file='user_wordcounts.csv'):
+        self.user_tries = {}
+        self.user_file = user_file
+        self.load_users(user_file)
+
+    def load_users(self, filename):
+        f = open(filename)
+        try:
+            for line in f:
+                (user, word, count) = line.split(',')[0:3]
+                self.add_sentence(user.translate(None, ' '), (' ' + word) * count)
+        finally:
+            f.close()
+
+    def write_users(self, filename=None):
+        if not filename:
+            filename = self.user_file
+
+        f = open(filename, 'w')
+        try:
+            for user in self.user_tries.keys():
+                this_words = self.user_tries[user].get_word_dict()
+                for (word, count) in this_words.iteritems():
+                    f.write('%s,%s,%d' % (user, word, count))
+        finally:
+            f.close()
+
+    def add_sentence(self, user, sentence):
+        if not self.user_tries.has_key(user):
+            self.user_tries[user] = ElBotTrie()
+        self.user_tries[user].add_sentence(sentence)
+
+    def get_count(self, user):
+        if self.user_tries.has_key(user):
+            return self.user_tries[user].total_words()
+        else:
+            return 0
 
 class ElBot(irc.IRCClient):
-    nickname = "elBot"
+    nickname = "elBot_testing"
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
         self.logger = MessageLogger(open(self.factory.filename, "a"))
         self.logger.log("[connected at %s]" % 
                         time.asctime(time.localtime(time.time())))
+        self.word_counter = WordCounter()
+        self.load_users()
 
     def connectionLost(self, reason):
         irc.IRCClient.connectionLost(self, reason)
         self.logger.log("[disconnected at %s]" % 
                         time.asctime(time.localtime(time.time())))
         self.logger.close()
-
+        self.word_counter.write_users()
 
     # callbacks for events
 
@@ -58,6 +98,8 @@ class ElBot(irc.IRCClient):
         """This will get called when the bot receives a message."""
         user = user.split('!', 1)[0]
         self.logger.log("<%s> %s" % (user, msg))
+        
+        self.word_counter.add_sentence(user,msg)
 
         if self.nickname in msg:
             self.say(channel, 'What\'s that, ya hosier?')
@@ -67,6 +109,13 @@ class ElBot(irc.IRCClient):
             msg = 'Afraid I\'m pretty much a skeleton right now, so private messages don\'t lead to anything fun.' 
             self.msg(user, msg)
             return
+
+        print 'MSG: %s\nstart: %s\n split start: %s\n' % (msg, msg[0:3], msg.split(' ')[0])
+        command = msg.split(' ')[0]
+        if '!wc' in command:
+            print 'Someone asked for their wordcount %s.' % user
+            user_wc = self.word_counter.get_count(user)
+            self.say(channel, '%s, you\'ve said %d words.' % (user, user_wc))
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""

@@ -8,20 +8,26 @@ class ElBotTrie(Trie):
         for word in sentence.split(' '):
             self.add_word(word)
         return True
-"""
-    def total_words(self):
-        for n in self.subtree_iterator(self.root):
-            print n.end_count
 
-    def subtree_iterator(self, node):
-        for child_name in node.children.keys():
-            if not node.children[child_name]:
-                continue
-            print node
-            print 'Going deeper in the iter tree at child %s.' % child_name
-            self.subtree_iterator(node.children[child_name])
-        yield node
-"""
+    def get_word_dict(self, user):
+        return self._subtree_dict(self.root)
+    
+    def get_this_prefix(self, node, word=''):
+        return None
+
+    def _subtree_dict(self, node, accum_word='', accum_dict={})
+        return None
+
+    def total_words(self):
+        return self._subtree_words(self.root)
+
+    def _subtree_words(self, node, accum=0):
+        accum += node.end_count
+        for next_node in node.children.itervalues():
+            if next_node is not None:
+               accum = self._subtree_words(next_node, accum=accum)
+        return accum
+
     def count(self, unsafe_word):
         word = self.make_safe(unsafe_word)
         return self._count(self.root, word)

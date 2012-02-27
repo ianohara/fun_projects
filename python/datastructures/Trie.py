@@ -28,7 +28,9 @@ class Trie():
 
     def add_word(self, unsafe_word):
         word = Trie.make_safe(unsafe_word)
-        print('Adding a new word "%s" (unsafe form: "%s")' % (word, unsafe_word))
+        if not word:
+            return
+        #print('Adding a new word "%s" (unsafe form: "%s")' % (word, unsafe_word))
         self._add_safe_word(self.root, word)
         return True
 
@@ -38,15 +40,15 @@ class Trie():
         """
         if len(word) is 1:
             if not node.children[word]:
-                print('Adding new word end...')
+                #print('Adding new word end...')
                 node.children[word] = Node(parent=node)
             node.children[word].end_count += 1
-            print('Word end with count %d.' % node.children[word].end_count)
+            #print('Word end with count %d.' % node.children[word].end_count)
             return
         elif len(word) > 1:
             if not node.children[word[0]]:
                 node.children[word[0]] = Node(parent=node)
-            print('Going deeper...')
+            #print('Going deeper...')
             self._add_safe_word(node.children[word[0]], word[1:])
         else:
             raise RuntimeWarning # We shouldn't ever reach this...
