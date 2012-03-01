@@ -39,7 +39,7 @@ class WordCounter():
         try:
             for line in f:
                 (user, word, count) = line.split(',')[0:3]
-                self.add_sentence(user.translate(None, ' '), (' ' + word) * count)
+                self.add_sentence(user.translate(None, ' '), (' ' + word) * int(count))
         finally:
             f.close()
 
@@ -52,7 +52,7 @@ class WordCounter():
             for user in self.user_tries.keys():
                 this_words = self.user_tries[user].get_word_dict()
                 for (word, count) in this_words.iteritems():
-                    f.write('%s,%s,%d' % (user, word, count))
+                    f.write('%s,%s,%d\n' % (user, word, count))
         finally:
             f.close()
 
@@ -69,13 +69,14 @@ class WordCounter():
 
 class ElBot(irc.IRCClient):
     nickname = "elBot_testing"
+    def __init__(self):
+        self.word_counter = WordCounter()
+
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
         self.logger = MessageLogger(open(self.factory.filename, "a"))
         self.logger.log("[connected at %s]" % 
                         time.asctime(time.localtime(time.time())))
-        self.word_counter = WordCounter()
-        self.load_users()
 
     def connectionLost(self, reason):
         irc.IRCClient.connectionLost(self, reason)
@@ -116,6 +117,8 @@ class ElBot(irc.IRCClient):
             print 'Someone asked for their wordcount %s.' % user
             user_wc = self.word_counter.get_count(user)
             self.say(channel, '%s, you\'ve said %d words.' % (user, user_wc))
+        elif '!write_wc' in command:
+            self.word_counter.write_users()
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""

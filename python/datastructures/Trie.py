@@ -6,7 +6,9 @@ import logging as log
 
 class Node():
     def __init__(self, parent, 
-            children_names='a b c d e f g h i j k l m n o p q r s t u v w x y z'):
+            children_names='a b c d e f g h i j k l m n o p q r s t u v w x y z', 
+            my_name=None):
+        self.my_name = my_name;
         self.parent = parent
         self.children_names = children_names
         self.children = dict(zip([ch for ch in self.children_names.split(' ') if ch],
@@ -41,13 +43,13 @@ class Trie():
         if len(word) is 1:
             if not node.children[word]:
                 #print('Adding new word end...')
-                node.children[word] = Node(parent=node)
+                node.children[word] = Node(parent=node, my_name=word)
             node.children[word].end_count += 1
             #print('Word end with count %d.' % node.children[word].end_count)
             return
         elif len(word) > 1:
             if not node.children[word[0]]:
-                node.children[word[0]] = Node(parent=node)
+                node.children[word[0]] = Node(parent=node, my_name=word[0])
             #print('Going deeper...')
             self._add_safe_word(node.children[word[0]], word[1:])
         else:

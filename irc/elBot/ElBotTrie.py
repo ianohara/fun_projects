@@ -9,14 +9,22 @@ class ElBotTrie(Trie):
             self.add_word(word)
         return True
 
-    def get_word_dict(self, user):
+    def get_word_dict(self):
         return self._subtree_dict(self.root)
-    
-    def get_this_prefix(self, node, word=''):
-        return None
 
-    def _subtree_dict(self, node, accum_word='', accum_dict={})
-        return None
+    def _subtree_dict(self, node, accum_word='', accum_dict={}):
+        # The root node has no letter assigned to it
+        if node.my_name:
+            accum_word += node.my_name
+        # Might be at a non-word ending letter, this also
+        # takes care of the root node
+        if node.end_count:
+            print 'accum: %s at letter: %s end count is %d' % (accum_word, node.my_name, node.end_count)
+            accum_dict[accum_word] = node.end_count
+        for next_node in node.children.itervalues():
+            if next_node is not None:
+                accum_dict = self._subtree_dict(next_node, accum_word, accum_dict)
+        return accum_dict
 
     def total_words(self):
         return self._subtree_words(self.root)
