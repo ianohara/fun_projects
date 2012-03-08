@@ -2091,3 +2091,28 @@
 [22:54:58] <ianohara> Ah alright
 [22:54:59] <Caesar> for med phys
 [22:22:27] [disconnected at Wed Feb 29 22:22:27 2012]
+[20:55:41] [connected at Sun Mar  4 20:55:41 2012]
+[20:55:42] [I have joined #Eng_Bestiary]
+[20:55:51] <ianohara> !wc
+[20:55:51] <elBot> ianohara, you've said 739 words.
+[20:55:56] <ianohara> Har
+[20:56:00] <ianohara> !wc Caesar
+[20:56:00] <elBot> ianohara, you've said 742 words.
+[20:56:09] <ianohara> !wc caesar
+[20:56:09] <elBot> ianohara, you've said 744 words.
+[20:56:39] <ianohara> !write_wc
+[20:56:44] <ianohara> !wc
+[20:56:45] <elBot> ianohara, you've said 746 words.
+[20:59:53] [disconnected at Sun Mar  4 20:59:53 2012]
+[18:11:02] [connected at Mon Mar  5 18:11:02 2012]
+[18:11:03] [I have joined #Eng_Bestiary]
+[18:11:06] <ianohara> !wc Steve-K
+[18:11:06] <elBot> ianohara, you've said 750 words.
+[20:03:43] <ianohara> !wc
+[20:03:45] <elBot> ianohara, you've said 751 words.
+[21:11:50] <ianohara> ls
+[21:11:57] <ianohara> D'oh
+[22:01:21] [disconnected at Mon Mar  5 22:01:21 2012]
+[22:01:47] [connected at Mon Mar  5 22:01:47 2012]
+[22:01:51] [I have joined #Eng_Bestiary]
+[21:12:25] [disconnected at Tue Mar  6 21:12:25 2012]

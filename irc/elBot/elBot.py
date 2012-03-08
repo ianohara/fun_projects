@@ -67,10 +67,23 @@ class WordCounter():
         else:
             return 0
 
+    def get_word_count(self, user, word):
+        if self.user_tries.has_key(user):
+            return self.user_tries[user].count(word)
+        else:
+            return 0
+
 class ElBot(irc.IRCClient):
     nickname = "elBot_testing"
     def __init__(self):
         self.word_counter = WordCounter()
+        """
+        A dict where the keys are commands (!<command> from user)
+        and the values are functions to call when a command is executed.
+           The functions must have the signature:
+             func(self, channel=str(), user=str(), *args) 
+        """
+        self.commands = dict()
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
@@ -96,7 +109,7 @@ class ElBot(irc.IRCClient):
         self.logger.log("[I have joined %s]" % channel)
 
     def privmsg(self, user, channel, msg):
-        """This will get called when the bot receives a message."""
+        """This gets called when the bot receives a message."""
         user = user.split('!', 1)[0]
         self.logger.log("<%s> %s" % (user, msg))
         
@@ -110,13 +123,16 @@ class ElBot(irc.IRCClient):
             msg = 'Afraid I\'m pretty much a skeleton right now, so private messages don\'t lead to anything fun.' 
             self.msg(user, msg)
             return
-
-        print 'MSG: %s\nstart: %s\n split start: %s\n' % (msg, msg[0:3], msg.split(' ')[0])
-        command = msg.split(' ')[0]
+        
+        msg_components = msg.split(' ')
+        command = msg_components[0]
         if '!wc' in command:
-            print 'Someone asked for their wordcount %s.' % user
-            user_wc = self.word_counter.get_count(user)
-            self.say(channel, '%s, you\'ve said %d words.' % (user, user_wc))
+            wc_user = user
+            if len(msg_components) > 1:
+                wc_user = msg_components[1]
+            print 'Someone asked for a wordcount for user %s.' % wc_user
+            user_wc = self.word_counter.get_count(wc_user)
+            self.say(channel, '%s has said %d words.' % (wc_user, user_wc))
         elif '!write_wc' in command:
             self.word_counter.write_users()
 
